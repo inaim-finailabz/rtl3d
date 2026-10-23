@@ -1,0 +1,24 @@
+Package: rtl3d-desktop
+Version: 1.5.2-1~ubuntu25.10
+Architecture: arm64
+Maintainer: RTL@3D <noreply@rtl3d.invalid>
+Depends: wayfire (>= 0.9.0), wayfire (<< 0.9.0.~), breeze-icon-theme, fonts-inter-variable, libc6, libcairo2, libgcc-s1, libglib2.0-0t64, libpango-1.0-0, libpangocairo-1.0-0, libqt6core6t64, libqt6gui6, libqt6multimedia6, libqt6network6, libqt6qml6, libqt6quick6, libstdc++6, libtag2, libwf-config1, libwlroots-0.18, qml-qt6, qml6-module-org-kde-layershell, qml6-module-qt-labs-folderlistmodel, qml6-module-qtcore, qml6-module-qtmultimedia, qml6-module-qtquick, qml6-module-qtquick-controls, qml6-module-qtquick-dialogs, qml6-module-qtquick-layouts, qml6-module-qtquick-templates, qml6-module-qtquick-window, qml6-module-qtquick3d, qml6-module-qtquick3d-helpers, qt6-svg-plugins, qt6-wayland, wf-shell, swaylock, swayidle, bubblewrap, python3, openssl, xdg-user-dirs, python3-cryptography
+Recommends: konsole | ptyxis | gnome-terminal | foot | x-terminal-emulator, xwayland, plymouth, plymouth-label, python3-bleak, bluez, geoclue-2-demo, libnotify-bin, pipewire-bin
+Filename: pool/questing/rtl3d-desktop_1.5.2-1~ubuntu25.10_arm64.deb
+Size: 13030460
+MD5sum: 61af993ca216113adc7b99c225212517
+SHA1: d0f428b74552c56177a306d400fe3245ebcab1f1
+SHA256: d3c3d5c33d98cffa40881ecf91da08abbe0152cbed43fd2a59806c8051fbf78b
+Section: x11
+Priority: optional
+Description: RTL@3D Beirut, a 3D desktop in the spirit of Sun's Looking Glass
+ Windows are slabs of glass standing in a room you can turn and fly
+ through, and stay working windows whatever their pose. With a 3D dock,
+ a search in the header to start any app, a settings panel, and the
+ Looking Glass CD viewer made into a music player and a video player. It
+ installs beside the desktop you have (Ubuntu's own, or Plasma on
+ Kubuntu): choose "RTL@3D" on the login screen, or make it the first
+ choice there with "sudo rtl3d-login on".
+ .
+ This is RTL@3D Beirut 1.5.2, built for ubuntu25.10 and its Wayfire 0.9.0.
+

@@ -1,0 +1,42 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Architectures: amd64 arm64
+Codename: questing
+Components: main
+Date: Fri, 23 Oct 2026 20:45:41 +0000
+Description: RTL@3D Beirut 1.5.2 for Ubuntu questing
+Label: RTL@3D
+Origin: RTL@3D
+Suite: questing
+MD5Sum:
+ 2e9a0cbb5456bb32882abc6eb1548498              199 Release
+ 5dfd9a08250dc2e7d74220f6ffa8ceda             1973 main/binary-amd64/Packages
+ 4880f33ac5838dbb8a97e96cb0b7bcea             1080 main/binary-amd64/Packages.gz
+ 52eca2376e8e613e2bea8c7022d90b48             1973 main/binary-arm64/Packages
+ 5cf45ef34586ed5a4bdf66b0a06320dd             1078 main/binary-arm64/Packages.gz
+SHA1:
+ ab1019fe2bf745b738b8937124f5f92a0be61df8              199 Release
+ 7961598011654d97a85d3788530bbf9863757a47             1973 main/binary-amd64/Packages
+ e8f94f8fa3927d1e6f79ed61732ca97eeecf27bd             1080 main/binary-amd64/Packages.gz
+ b32d61a28f4e57574ba00c177513137658a65053             1973 main/binary-arm64/Packages
+ 3be23f3f940f25401432936d70207a2081b6f099             1078 main/binary-arm64/Packages.gz
+SHA256:
+ 441f6dbb5b3f42d660f45e2a36f28cd9aea449c20970c45efb8bb364d1441a43              199 Release
+ 0249e46878dc52d17aaca50b5c54444cb7f527ac551d5a5cdec69d7a7b2a1be6             1973 main/binary-amd64/Packages
+ 5a5d0e5d79ba6bfca24bedff0f6232286d64a203c58d3dcb4cf2ce3c26ad9767             1080 main/binary-amd64/Packages.gz
+ fe96e9580950f9626ba0f546765906afff2a9219df93b4242c6a02f758da2c24             1973 main/binary-arm64/Packages
+ f13dd7ea12c626c228076cba53e97169164c05434b1afcce6f473d84f0d7e6ca             1078 main/binary-arm64/Packages.gz
+SHA512:
+ 41ab9ef5cda9f86536a16cdbe3f683f30ec1ff0e2bbdff0acaa0a888a543bd5c09b1a4ef303cae101ed1568d3c67c921374dc26de86b0be772b28913d12022a9              199 Release
+ 3fcf456fe788ca3603a703f9f42703252f62d22e6416e07e953a851c9a5a35546e3db5a12c465afef83dcd17ac91ed7374fd9ac97fc6d038d39d44ae5b205df7             1973 main/binary-amd64/Packages
+ 58e04ab612e18b18881436ff9f8890fc4c00a70d55558fc51e40dd3ef9c435038d59d9ec0f5feccb20a9f5772a5598baf7842ce33215f427edd4f5b5cfbfb76a             1080 main/binary-amd64/Packages.gz
+ ea8f336867132def4b1a954c4969761795dcabab0723af9752f945b7dfbbe95c91b2aa3940623dd69f7f3db0c53e13a4b1c384c6197488bc500d1fe7217c35eb             1973 main/binary-arm64/Packages
+ 630c329c17f3f67263685d93ab95b762eaeec5ca304a3397b59d1c6060fc10cbafd322b94a7a80eec2cc22aa220744f3a627ffb3802e053f3db3ef883fcf26c1             1078 main/binary-arm64/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQTbBSIUjGM0nntJ3AfP2ylecF7zhQUCatvHdQAKCRDP2ylecF7z
+hajPAQC++IP8Q4Xsbnv4IatWxRW3q7q7t2lcGNuiS4DGZRNOeQEA7ei/G/4As1Vl
+o1wKlb5+23HOdWXFjCBjVmbyJUR8twM=
+=Z9mv
+-----END PGP SIGNATURE-----
