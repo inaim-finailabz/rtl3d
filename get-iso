@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 AI Labz Ltd
+#
+# Downloads the RTL@3D installer ISO (Kubuntu with RTL@3D on it) from the
+# latest release, checks it, and puts it together:
+#
+#   curl -fsSL https://inaim-finailabz.github.io/rtl3d/get-iso | bash
+#
+# The release has it in parts (GitHub takes files up to 2 GB). Each part
+# is checked against the release's SHA256SUMS, which the RTL@3D release key
+# signed, and the joined ISO against its own checksum. Then write it to a
+# USB stick (balenaEtcher, GNOME Disks, or dd) and start the computer from it.
+#
+#   RTL3D_RELEASE=v1.5.3 ... a given release instead of the latest
+#   RTL3D_DIR=~/Downloads   where the ISO goes (default: here)
+# Works on Linux and macOS (bash, curl, gpg, sha256sum or shasum).
+set -euo pipefail
+
+REPO="${RTL3D_REPO:-inaim-finailabz/rtl3d}"
+APT_URL="${RTL3D_APT:-https://inaim-finailabz.github.io/rtl3d/apt}"
+FINGERPRINT="${RTL3D_FINGERPRINT:-DB0522148C63349E7B49DC07CFDB295E705EF385}"
+RELEASE="${RTL3D_RELEASE:-latest}"
+DIR="${RTL3D_DIR:-$PWD}"
+die() { echo "error: $*" >&2; exit 1; }
+note() { echo "✓ $*"; }
+sha256() { if command -v sha256sum >/dev/null; then sha256sum "$@"; else shasum -a 256 "$@"; fi; }
+
+for t in curl gpg gpgv; do command -v "$t" >/dev/null || die "$t is needed (Ubuntu: sudo apt install $t; macOS: brew install gnupg)"; done
+if [ "$RELEASE" = latest ]; then
+    base="https://github.com/$REPO/releases/latest/download"
+else
+    base="https://github.com/$REPO/releases/download/$RELEASE"
+fi
+base="${RTL3D_BASE:-$base}"   # (tests: a folder of release files, as file://)
+tmp="$(mktemp -d)"; trap 'rm -rf "$tmp"' EXIT
+
+# The signed checksums, and the key that signed them.
+curl -fsSL "$base/SHA256SUMS" -o "$tmp/SHA256SUMS" || die "could not fetch the release's SHA256SUMS"
+curl -fsSL "$base/SHA256SUMS.asc" -o "$tmp/SHA256SUMS.asc" || die "could not fetch its signature"
+curl -fsSL "$APT_URL/rtl3d-archive-keyring.gpg" -o "$tmp/key.gpg" || die "could not fetch the release key"
+found="$(gpg --show-keys --with-colons "$tmp/key.gpg" 2>/dev/null | awk -F: '$1 == "fpr" { print $10; exit }')"
+[ "$found" = "$FINGERPRINT" ] || die "the key offered is not RTL@3D's release key ($found)"
+# gpgv trusts only the key given, and needs no keyring of the user's.
+gpgv --keyring "$tmp/key.gpg" "$tmp/SHA256SUMS.asc" "$tmp/SHA256SUMS" >/dev/null 2>&1 || die "SHA256SUMS is not signed by RTL@3D's release key"
+note "the release's checksums are signed by RTL@3D"
+
+# The ISO's name and parts, as the checksums list them.
+name="$(sed -n 's/^[0-9a-f]\{64\}  \*\{0,1\}\(rtl3d-.*\.iso\)\.sha256$/\1/p' "$tmp/SHA256SUMS" | head -n1)"
+[ -n "$name" ] || die "this release has no ISO (see https://github.com/$REPO/releases)"
+parts="$(sed -n "s/^[0-9a-f]\{64\}  \*\{0,1\}\($name\.part[0-9]\)\$/\1/p" "$tmp/SHA256SUMS" | sort)"
+[ -n "$parts" ] || die "the ISO's parts are not in SHA256SUMS"
+signed() { grep -E "^[0-9a-f]{64}  \*?$1\$" "$tmp/SHA256SUMS" | sed 's/  \*/  /'; }
+# The whole ISO's checksum, itself in the signed list.
+curl -fsSL "$base/$name.sha256" -o "$tmp/$name.sha256" || die "could not fetch $name.sha256"
+(cd "$tmp" && signed "$name.sha256" | sha256 -c - >/dev/null) || die "$name.sha256 is not what the release signed"
+mkdir -p "$DIR"; cd "$DIR"
+[ -f "$name" ] && sha256 -c "$tmp/$name.sha256" >/dev/null 2>&1 && { note "$DIR/$name is already here and checked"; exit 0; }
+
+echo "$name ($(echo "$parts" | wc -l | tr -d ' ') parts, about 5 GB)"
+for f in $parts; do
+    if ! signed "$f" | sha256 -c - >/dev/null 2>&1; then
+        # Carry on from a part left half-way; a part that is wrong is fetched again whole.
+        curl -fL --retry 5 -C - "$base/$f" -o "$f" || true
+        if ! signed "$f" | sha256 -c - >/dev/null 2>&1; then
+            rm -f "$f"
+            curl -fL --retry 5 "$base/$f" -o "$f" || die "could not download $f"
+            signed "$f" | sha256 -c - >/dev/null 2>&1 || die "$f is not what the release signed"
+        fi
+    fi
+    note "$f"
+done
+cat $parts > "$name"
+sha256 -c "$tmp/$name.sha256" >/dev/null || die "the joined ISO does not match its checksum"
+rm -f $parts
+note "$DIR/$name"
+echo "  Write it to a USB stick (balenaEtcher, GNOME Disks, or: sudo dd if=$name of=/dev/sdX bs=4M status=progress),"
+echo "  start the computer from it, and choose Install. The computer then starts in RTL@3D."

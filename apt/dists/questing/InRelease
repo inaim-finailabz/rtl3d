@@ -1,0 +1,34 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Architectures: amd64
+Codename: questing
+Components: main
+Date: Fri, 30 Oct 2026 10:51:30 +0000
+Description: RTL@3D Beirut 1.5.7 for Ubuntu questing
+Label: RTL@3D
+Origin: RTL@3D
+Suite: questing
+MD5Sum:
+ ead8252696f5a3c723e66c283c054694              193 Release
+ 6e31480b61e3c608e325b5b1587e0179             2014 main/binary-amd64/Packages
+ 10cb470568e8bd5c294f2eba7a948788             1097 main/binary-amd64/Packages.gz
+SHA1:
+ 6b631555393435815962430d618e598789f7b2e0              193 Release
+ 5eadda7e6fc2be2240c45de5696ecfb6b414d3be             2014 main/binary-amd64/Packages
+ cfb26b69ef66ab9981695020827cdc7222acaf6f             1097 main/binary-amd64/Packages.gz
+SHA256:
+ 65a6410e93cd55dea47580deabf325fda18126d51cffd1aa64b704d53ac09257              193 Release
+ 8a69d5b106f6b7e066909957ba8e66899ad51e9c6ab12ab84b97d67e677564e8             2014 main/binary-amd64/Packages
+ 03db9a5e6a6ed1bfbf4fe1cc98f6c6e8b04ffad86314ad552d94f92d9cbb3239             1097 main/binary-amd64/Packages.gz
+SHA512:
+ a66b340d920954167edf35ce7a4f60d8afc8d8c35bc3806f5ecdad1d6b2909622a3f8c21b2d06807326e5e282f5ea0aee2e67c746bfb3c73ba470126192563b5              193 Release
+ 08d24b3d20c7b195334e754d64f818b9773620f611460305b1f49708b1c41c2da7cc0a131c9ebef6450eef0d7ebb63f3ca46c32c6ee967d7d9fbe58ee9243322             2014 main/binary-amd64/Packages
+ 1696e041da00cbedeabc946dc0604c96389d15b0d72d911e058be86d220187fc219d7c79d165366a6e4b645fac08e01ac48c8c8ee76803ac5202dd03a037967a             1097 main/binary-amd64/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQTbBSIUjGM0nntJ3AfP2ylecF7zhQUCauR2sgAKCRDP2ylecF7z
+hfPeAQDpTRHb7N9N8i0bVj9pAUcwDDb17uCcZ0Y57otoYiCxZwD9H9WT5Sytm6Cp
+y7eJXd3s4bWkaoNWWkciroGmuwUebAk=
+=1q7j
+-----END PGP SIGNATURE-----

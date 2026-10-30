@@ -1,0 +1,109 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 AI Labz Ltd
+#
+# Installs RTL@3D on Ubuntu or Kubuntu, and keeps it up to date.
+#
+#   curl -fsSL https://inaim-finailabz.github.io/rtl3d/get | bash
+#
+# It adds RTL@3D's package repository to apt (signed: apt takes nothing
+# from it that the RTL@3D release key did not sign), and installs the
+# package rtl3d-desktop from it. From then on new releases arrive with the
+# system's own updates. If there is no package for this Ubuntu or this
+# kind of machine, it offers to build RTL@3D here from its source instead.
+#
+#   bash get-rtl3d.sh --remove     take RTL@3D and its repository off again
+set -euo pipefail
+
+APT_URL="${RTL3D_APT:-https://inaim-finailabz.github.io/rtl3d/apt}"
+# The source of the latest release (RTL@3D is GPL-3.0: published with every release).
+SOURCE="${RTL3D_SOURCE:-https://github.com/inaim-finailabz/rtl3d/releases/latest/download/rtl3d-source.tar.gz}"
+# The release key's fingerprint: any other key is refused. (Empty until the
+# key is made: see desktop/keys/README.md.)
+FINGERPRINT="${RTL3D_FINGERPRINT:-DB0522148C63349E7B49DC07CFDB295E705EF385}"
+
+KEYRING=/usr/share/keyrings/rtl3d-archive-keyring.gpg
+SOURCES=/etc/apt/sources.list.d/rtl3d.sources
+die() { echo "error: $*" >&2; exit 1; }
+note() { echo "✓ $*"; }
+sudo=""; [ "$(id -u)" = 0 ] || sudo="sudo"
+
+if [ "${1:-}" = "--remove" ]; then
+    $sudo apt-get remove -y rtl3d-desktop || true
+    $sudo rm -f "$SOURCES" "$KEYRING"
+    $sudo apt-get update -qq || true
+    note "RTL@3D removed (your settings are kept in ~/.config/rtl3d)"
+    exit 0
+fi
+
+[ -r /etc/os-release ] || die "this does not look like Ubuntu"
+# shellcheck disable=SC1091
+. /etc/os-release
+command -v apt-get >/dev/null || die "RTL@3D's packages are for Ubuntu and Kubuntu (apt)"
+suite="${UBUNTU_CODENAME:-${VERSION_CODENAME:-}}"
+arch="$(dpkg --print-architecture)"
+echo "RTL@3D for ${PRETTY_NAME:-this system} ($arch)"
+
+fetch() { # url file
+    if command -v curl >/dev/null; then curl -fsSL "$1" -o "$2"; else wget -qO "$2" "$1"; fi
+}
+have() { # url: is it there?
+    if command -v curl >/dev/null; then curl -fsIL "$1" >/dev/null 2>&1; else wget -q --spider "$1"; fi
+}
+
+build_here() {
+    echo
+    echo "There is no RTL@3D package for this Ubuntu ($suite) and this machine ($arch)"
+    echo "yet. It can be built here from its source instead (a few minutes)."
+    if [ -t 0 ] || [ -e /dev/tty ]; then
+        read -r -p "Build it here? [Y/n] " answer < /dev/tty || answer=n
+    else
+        answer=n
+    fi
+    case "${answer:-y}" in [Nn]*) exit 1 ;; esac
+    where="${RTL3D_DIR:-$HOME/rtl3d-source}"
+    rm -rf "$where.tmp" && mkdir -p "$where.tmp"
+    fetch "$SOURCE" "$where.tmp/source.tar.gz" || die "could not download RTL@3D's source ($SOURCE)"
+    tar -xzf "$where.tmp/source.tar.gz" -C "$where.tmp" --strip-components=1
+    rm -f "$where.tmp/source.tar.gz"
+    rm -rf "$where" && mv "$where.tmp" "$where"
+    exec "$where/desktop/install.sh"
+}
+
+[ -n "$suite" ] && have "$APT_URL/dists/$suite/InRelease" || build_here
+have "$APT_URL/dists/$suite/main/binary-$arch/Packages" || build_here
+
+# The key, checked against the fingerprint when there is one.
+tmp="$(mktemp -d)"
+trap 'rm -rf "$tmp"' EXIT
+fetch "$APT_URL/rtl3d-archive-keyring.gpg" "$tmp/key.gpg" || die "could not fetch the release key"
+if [ -n "$FINGERPRINT" ]; then
+    command -v gpg >/dev/null || $sudo apt-get install -y gnupg >/dev/null
+    found="$(gpg --show-keys --with-colons "$tmp/key.gpg" 2>/dev/null | awk -F: '$1 == "fpr" { print $10; exit }')"
+    [ "$found" = "${FINGERPRINT// /}" ] || die "the key offered is not RTL@3D's release key ($found); not installing"
+fi
+$sudo install -Dm644 "$tmp/key.gpg" "$KEYRING"
+$sudo tee "$SOURCES" >/dev/null <<SRC
+# RTL@3D's packages: new releases come with the system's own updates.
+Types: deb
+URIs: $APT_URL
+Suites: $suite
+Components: main
+Signed-By: $KEYRING
+SRC
+note "RTL@3D's repository added ($APT_URL, $suite)"
+
+$sudo apt-get update -qq
+$sudo apt-get install -y rtl3d-desktop
+note "$(dpkg-query -W -f='${Package} ${Version}' rtl3d-desktop) installed"
+
+cat <<'TEXT'
+
+Log out, and on the login screen choose "RTL@3D" (where the desktops are
+listed). To have it chosen there already:   sudo rtl3d-login on
+Or try it in a window first:                rtl3d-try
+
+Updates come with your system's updates (sudo apt update && sudo apt upgrade,
+or Software Updater / Discover). To remove it:
+    curl -fsSL https://inaim-finailabz.github.io/rtl3d/get | bash -s -- --remove
+TEXT

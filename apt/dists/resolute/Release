@@ -1,0 +1,24 @@
+Architectures: amd64
+Codename: resolute
+Components: main
+Date: Fri, 30 Oct 2026 10:51:31 +0000
+Description: RTL@3D Beirut 1.5.7 for Ubuntu resolute
+Label: RTL@3D
+Origin: RTL@3D
+Suite: resolute
+MD5Sum:
+ 8e4dbf3d3dc6bce35503f388fc410055              193 Release
+ 9bdd8691d891bb3cf2c822c3ebaa64a8             2027 main/binary-amd64/Packages
+ e0d18ed11805143a9bc77450b6027b22             1100 main/binary-amd64/Packages.gz
+SHA1:
+ eecca57edf9459d4177e9d9a276766e7f6cb8e5b              193 Release
+ d2f35f09f70236ae0399e5f441470706f4bcbce5             2027 main/binary-amd64/Packages
+ a22ef37f62275a64880dc3bfdf104b9d6cf40465             1100 main/binary-amd64/Packages.gz
+SHA256:
+ c582c5013b0cb26f4d241d6c103af97a7037f0e208d9144e2ba014573d28fb18              193 Release
+ e83e1647ae7e212ffcb3e6fad7df381c823ea504691bfcf0e7592129e9f0eb2a             2027 main/binary-amd64/Packages
+ 09fb3b5e934102e635e42ef62b22da404cb9283efa5b7a31d518c1806866e379             1100 main/binary-amd64/Packages.gz
+SHA512:
+ d960b97eb8ca9b3b832cd713552bc4c7aa85a616aa11eb2259a60e22b4ced5606d5c14fc5030a61d8c32999bb09d32d4d1166a282efbacc5a2cf03441e46eb11              193 Release
+ 76c61105a4bab04e050e89b2734c392a9c69089c30d215aa3b0f82efbe774cf318cf2d94a4ba939c72e6ac21e06db1504b4721919d1ba1ec0e0f11c826b85397             2027 main/binary-amd64/Packages
+ 237a61ec6b1863a1d6b4a389c5fb4dae10e88c9a7996a5a28da86777f86676755ae154d7bf6435253817df94106d10fe7b06a28e142e4ffdd77630ba755f6e1a             1100 main/binary-amd64/Packages.gz
